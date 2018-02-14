@@ -1,0 +1,39 @@
+[ { "name" : "A"
+  , "version" : "1"
+  , "size" : 9
+  , "depends" : [["B"], ["C"]] }
+, { "name" : "B"
+  , "version" : "2"
+  , "size" : 8
+  , "depends" : [["C"], ["D"]] }
+, { "name" : "C"
+  , "version" : "3"
+  , "size" : 7
+  , "depends" : [["D"], ["E"]] }
+, { "name" : "D"
+  , "version" : "0"
+  , "size" : 10
+  , "depends" : [["E", "F"]] }
+, { "name" : "E"
+  , "version" : "8"
+  , "size" : 2
+  , "conflicts" : ["F"]
+  , "depends" : [["G"]] }
+, { "name" : "F"
+  , "version" : "4"
+  , "size" : 6
+  , "depends" : [["H"]] }
+, { "name" : "G"
+  , "version" : "7"
+  , "size" : 3
+  , "depends" : [["I"]] }
+, { "name" : "H"
+  , "version" : "5"
+  , "size" : 5
+  , "depends" : [["J"]] }
+, { "name" : "I"
+  , "version" : "9"
+  , "size" : 1 }
+, { "name" : "J"
+  , "version" : "6"
+  , "size" : 4 } ]

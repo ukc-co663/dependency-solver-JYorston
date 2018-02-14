@@ -1,0 +1,15 @@
+[ { "name" : "X1", "version" : "1", "size" : 42000 }
+, { "name" : "X2", "version" : "1", "size" : 21000 }
+, { "name" : "X3", "version" : "1", "size" : 20000 }
+, { "name" : "Y11", "depends" : [["Z11"]], "version" : "1", "size" : 42 }
+, { "name" : "Y12", "depends" : [["Y11","Z12"]], "version" : "1", "size" : 42 }
+, { "name" : "Y13", "depends" : [["Y12","Z13"]], "version" : "1", "size" : 42 }
+, { "name" : "Y22", "depends" : [["Z22"]], "version" : "1", "size" : 42 }
+, { "name" : "Y23", "depends" : [["Y22","Z23"]], "version" : "1", "size" : 42 }
+, { "name" : "Y33", "depends" : [["Z33"]], "version" : "1", "size" : 42 }
+, { "name" : "Z11", "depends" : [["X1"]], "version" : "1", "size" : 42 }
+, { "name" : "Z12", "depends" : [["X2"]], "version" : "1", "size" : 42 }
+, { "name" : "Z13", "depends" : [["X3"]], "version" : "1", "size" : 42 }
+, { "name" : "Z22", "depends" : [["Y11"],["X2"]], "version" : "1", "size" : 42 }
+, { "name" : "Z23", "depends" : [["Y12"],["X3"]], "version" : "1", "size" : 42 }
+, { "name" : "Z33", "depends" : [["Y22"],["X3"]], "version" : "1", "size" : 42 } ]
