@@ -5,54 +5,168 @@ import com.alibaba.fastjson.TypeReference;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-class Package {
-  private String name;
-  private String version;
-  private Integer size;
-  private List<List<String>> depends = new ArrayList<>();
-  private List<String> conflicts = new ArrayList<>();
-
-  public String getName() { return name; }
-  public String getVersion() { return version; }
-  public Integer getSize() { return size; }
-  public List<List<String>> getDepends() { return depends; }
-  public List<String> getConflicts() { return conflicts; }
-  public void setName(String name) { this.name = name; }
-  public void setVersion(String version) { this.version = version; }
-  public void setSize(Integer size) { this.size = size; }
-  public void setDepends(List<List<String>> depends) { this.depends = depends; }
-  public void setConflicts(List<String> conflicts) { this.conflicts = conflicts; }
-}
-
 public class Main {
-  public static void main(String[] args) throws IOException {
-    TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
-    List<Package> repo = JSON.parseObject(readFile(args[0]), repoType);
-    TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
-    List<String> initial = JSON.parseObject(readFile(args[1]), strListType);
-    List<String> constraints = JSON.parseObject(readFile(args[2]), strListType);
 
-    // CHANGE CODE BELOW:
-    // using repo, initial and constraints, compute a solution and print the answer
-    for (Package p : repo) {
-      System.out.printf("package %s version %s\n", p.getName(), p.getVersion());
-      for (List<String> clause : p.getDepends()) {
-        System.out.printf("  dep:");
-        for (String q : clause) {
-          System.out.printf(" %s", q);
+    private static final Comparator<Package> _DEPENDCOMP = (p1,p2) -> Integer.compare(p1.getDepends().size(), p2.getDepends().size());
+
+    public static void main(String[] args) throws IOException {
+
+        String currentTest = "seen-3";
+
+        // Allows debugging rather than commandline args
+        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
+        String repoPath = basePath + "/depsolver-StartJava-master/tests/" + currentTest +"/repository.json";
+        String initPath = basePath + "/depsolver-StartJava-master/tests/" + currentTest +"/initial.json";
+        String constPath = basePath + "/depsolver-StartJava-master/tests/" + currentTest +"/constraints.json";
+
+
+
+        TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
+        List<Package> repo = JSON.parseObject(readFile(repoPath), repoType);
+        TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
+        List<String> initial = JSON.parseObject(readFile(initPath), strListType);
+        List<String> constraints = JSON.parseObject(readFile(constPath), strListType);
+
+
+        ArrayList<Package> resolved = new ArrayList<>();
+        ArrayList<Package> unresolved = new ArrayList<>();
+
+
+        ArrayList<String> commands = new ArrayList<>();
+        for(String constraint: constraints){
+            Package p = parseConstraint(constraint,repo);
+            List<Package> allDeps = new ArrayList<>();
+            allDependencies(p,repo, allDeps, new ArrayList<>());
+
+            Package smallest = allDeps.stream().min(_DEPENDCOMP).get();
+
+            while(allDeps.size() > 0){
+                allDeps.remove(smallest);
+                commands.add(smallest.getName());
+                for (Package nextPackage: allDeps) {
+                    for (String dep: allDeps) {
+
+                    }
+
+                }
+            }
         }
-        System.out.printf("\n");
-      }
-    }
-  }
 
-  static String readFile(String filename) throws IOException {
-    BufferedReader br = new BufferedReader(new FileReader(filename));
-    StringBuilder sb = new StringBuilder();
-    br.lines().forEach(line -> sb.append(line));
-    return sb.toString();
-  }
+
+
+    }
+
+    /**
+     * Parse a constraint to get package name
+     * @param constraint
+     * @param repo
+     * @return
+     */
+    public static Package parseConstraint(String constraint, List<Package> repo){
+        // TODO: Add actual functionality this will just get name
+        return getPackageFromString(constraint.substring(1,2),repo);
+    }
+
+
+    public static void allDependencies(Package p, List<Package> repo, List<Package> resolved, List<Package> unresolved){
+        unresolved.add(p);
+        for (List<String> dep:p.getDepends()) {
+            for(String depString: dep) {
+                Package next = getPackageFromString(depString, repo);
+                if(!resolved.contains(next)) {
+                    if(!unresolved.contains(next)) {
+                        allDependencies(next,repo,resolved,unresolved);
+                    }
+                }
+            }
+        }
+        resolved.add(p);
+        unresolved.remove(p);
+
+    }
+
+//    /**
+//     * Traverse graph detect cycles
+//     * @param p
+//     * @param repo
+//     * @param resolved
+//     * @param unresolved
+//     * @throws Exception
+//     */
+//    public static void printDependencies(Package p, List<Package> repo, List<Package> resolved, List<Package> unresolved){
+//        unresolved.add(p);
+//        for (List<String> dep:p.getDepends()) {
+//            for(String depString: dep) {
+//                Package next = getPackageFromString(depString, repo);
+//                if(!resolved.contains(next)) {
+//                    if(unresolved.contains(next)) {
+//                        System.out.println("cycle");
+//                    }
+//                    else{
+//                        printDependencies(next,repo,resolved,unresolved);
+//                    }
+//                }
+//            }
+//        }
+//        resolved.add(p);
+//        unresolved.remove(p);
+//
+//
+//    }
+
+    /**
+     * Get the package details from repository
+     * @param packageString
+     * @param repo
+     * @return
+     */
+    public static Package getPackageFromString(String packageString, List<Package> repo){
+
+        String name = packageString;
+        String version = "";
+
+        if(packageString.contains("=")){
+            String [] parts = packageString.split("=");
+            name = parts[0];
+            version = parts[1];
+        }
+
+        Package returnPackage = null;
+        for(Package p: repo){
+            if(p.getName().equals(name)){
+                if(version.equals("")){
+                    returnPackage = p;
+                }
+                else{
+                    if(p.getVersion().equals(version)){
+                        returnPackage = p;
+                    }
+                }
+            }
+        }
+        return returnPackage;
+    }
+
+
+    /**
+     * Return the package with no dependencies in the repo
+     * @param repo
+     * @return
+     */
+    static Package getPackageNoDepends(List<Package> repo){
+
+        return null;
+    }
+
+    static String readFile(String filename) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        StringBuilder sb = new StringBuilder();
+        br.lines().forEach(line -> sb.append(line));
+        return sb.toString();
+    }
 }
