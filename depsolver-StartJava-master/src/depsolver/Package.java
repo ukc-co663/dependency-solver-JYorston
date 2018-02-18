@@ -20,4 +20,18 @@ class Package {
     public void setSize(Integer size) { this.size = size; }
     public void setDepends(List<List<String>> depends) { this.depends = depends; }
     public void setConflicts(List<String> conflicts) { this.conflicts = conflicts; }
+
+    public boolean dependsOnPackage(Package p){
+
+        boolean depsOnPackage = false;
+        for (List<String> depList:this.getDepends()) {
+            for (String dep:depList) {
+                if(dep.equals(p.getName())){
+                    depsOnPackage = true;
+                }
+            }
+        }
+
+        return depsOnPackage;
+    }
 }

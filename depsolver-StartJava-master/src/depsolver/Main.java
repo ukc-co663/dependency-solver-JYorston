@@ -2,13 +2,13 @@ package depsolver;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Main {
 
@@ -34,32 +34,61 @@ public class Main {
 
 
         ArrayList<Package> resolved = new ArrayList<>();
-        ArrayList<Package> unresolved = new ArrayList<>();
+        List<String> commands = new ArrayList<>();
+
+        for (String s :constraints) {
+            Package constraint = parseConstraint(s,repo);
+            List<Package> badPackages = new ArrayList<>();
+            solve(constraint,repo, new ArrayList<>(), resolved, badPackages);
 
 
-        ArrayList<String> commands = new ArrayList<>();
-        for(String constraint: constraints){
-            Package p = parseConstraint(constraint,repo);
-            List<Package> allDeps = new ArrayList<>();
-            allDependencies(p,repo, allDeps, new ArrayList<>());
-
-            Package smallest = allDeps.stream().min(_DEPENDCOMP).get();
-
-            while(allDeps.size() > 0){
-                allDeps.remove(smallest);
-                commands.add(smallest.getName());
-                for (Package nextPackage: allDeps) {
-                    for (String dep: allDeps) {
-
+            for (Package bp:badPackages) {
+                ListIterator<Package> it = resolved.listIterator();
+                while(it.hasNext()){
+                    Package next = it.next();
+                    if(next.getName().equals(bp.getName())){
+                        it.remove();
                     }
-
+                    else if(next.dependsOnPackage(bp)){
+                        it.remove();
+                    }
                 }
             }
+
+
+        }
+        for (Package p: resolved) {
+            commands.add("+" + p.getName());
+        }
+
+        for (String command:commands) {
+            System.out.println(command);
         }
 
 
 
     }
+
+
+    private static void solve(Package constraint, List<Package> repo, List<Package> unresolved, List<Package> resolved, List<Package> badNodes){
+        unresolved.add(constraint);
+        for (List<String> dependencies:constraint.getDepends()) {
+            for(String dep: dependencies){
+                Package current = getPackageFromString(dep,repo);
+                if(!resolved.contains(current)) {
+                    if (unresolved.contains(current)) {
+                        badNodes.add(constraint);
+                        break;
+                    }
+                    solve(current, repo, unresolved,resolved, badNodes);
+                }
+            }
+        }
+        resolved.add(constraint);
+        unresolved.remove(constraint);
+    }
+
+
 
     /**
      * Parse a constraint to get package name
@@ -72,52 +101,6 @@ public class Main {
         return getPackageFromString(constraint.substring(1,2),repo);
     }
 
-
-    public static void allDependencies(Package p, List<Package> repo, List<Package> resolved, List<Package> unresolved){
-        unresolved.add(p);
-        for (List<String> dep:p.getDepends()) {
-            for(String depString: dep) {
-                Package next = getPackageFromString(depString, repo);
-                if(!resolved.contains(next)) {
-                    if(!unresolved.contains(next)) {
-                        allDependencies(next,repo,resolved,unresolved);
-                    }
-                }
-            }
-        }
-        resolved.add(p);
-        unresolved.remove(p);
-
-    }
-
-//    /**
-//     * Traverse graph detect cycles
-//     * @param p
-//     * @param repo
-//     * @param resolved
-//     * @param unresolved
-//     * @throws Exception
-//     */
-//    public static void printDependencies(Package p, List<Package> repo, List<Package> resolved, List<Package> unresolved){
-//        unresolved.add(p);
-//        for (List<String> dep:p.getDepends()) {
-//            for(String depString: dep) {
-//                Package next = getPackageFromString(depString, repo);
-//                if(!resolved.contains(next)) {
-//                    if(unresolved.contains(next)) {
-//                        System.out.println("cycle");
-//                    }
-//                    else{
-//                        printDependencies(next,repo,resolved,unresolved);
-//                    }
-//                }
-//            }
-//        }
-//        resolved.add(p);
-//        unresolved.remove(p);
-//
-//
-//    }
 
     /**
      * Get the package details from repository
@@ -150,17 +133,6 @@ public class Main {
             }
         }
         return returnPackage;
-    }
-
-
-    /**
-     * Return the package with no dependencies in the repo
-     * @param repo
-     * @return
-     */
-    static Package getPackageNoDepends(List<Package> repo){
-
-        return null;
     }
 
     static String readFile(String filename) throws IOException {
