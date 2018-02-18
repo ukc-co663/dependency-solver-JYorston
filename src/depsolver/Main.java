@@ -2,8 +2,6 @@ package depsolver;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,19 +16,23 @@ public class Main {
 
         String currentTest = "seen-3";
 
-        // Allows debugging rather than commandline args
-        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
-        String repoPath = basePath + "/depsolver-StartJava-master/tests/" + currentTest +"/repository.json";
-        String initPath = basePath + "/depsolver-StartJava-master/tests/" + currentTest +"/initial.json";
-        String constPath = basePath + "/depsolver-StartJava-master/tests/" + currentTest +"/constraints.json";
-
-
+//        // Allows debugging rather than commandline args
+//        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
+//        String repoPath = basePath + "/depsolver-StartJava-master/tests/" + currentTest +"/repository.json";
+//        String initPath = basePath + "/depsolver-StartJava-master/tests/" + currentTest +"/initial.json";
+//        String constPath = basePath + "/depsolver-StartJava-master/tests/" + currentTest +"/constraints.json";
+//
+//        TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
+//        List<Package> repo = JSON.parseObject(readFile(repoPath), repoType);
+//        TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
+//        List<String> initial = JSON.parseObject(readFile(initPath), strListType);
+//        List<String> constraints = JSON.parseObject(readFile(constPath), strListType);
 
         TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
-        List<Package> repo = JSON.parseObject(readFile(repoPath), repoType);
+        List<Package> repo = JSON.parseObject(readFile(args[0]), repoType);
         TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
-        List<String> initial = JSON.parseObject(readFile(initPath), strListType);
-        List<String> constraints = JSON.parseObject(readFile(constPath), strListType);
+        List<String> initial = JSON.parseObject(readFile(args[1]), strListType);
+        List<String> constraints = JSON.parseObject(readFile(args[2]), strListType);
 
 
         ArrayList<Package> resolved = new ArrayList<>();
@@ -64,9 +66,6 @@ public class Main {
         for (String command:commands) {
             System.out.println(command);
         }
-
-
-
     }
 
 
