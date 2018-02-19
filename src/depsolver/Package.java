@@ -34,4 +34,9 @@ class Package {
 
         return depsOnPackage;
     }
+
+    public int getVersionAsInt(){
+        return Main.getVersionAsInt(this.getVersion());
+    }
+
 }
