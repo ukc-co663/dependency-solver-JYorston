@@ -3,6 +3,7 @@ package depsolver;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -62,9 +63,8 @@ public class Main {
             commands.add("+" + p.getName());
         }
 
-        for (String command:commands) {
-            System.out.println(command);
-        }
+        String jsonCommands = JSON.toJSONString(commands);
+        System.out.print(jsonCommands);
     }
 
 
@@ -139,4 +139,5 @@ public class Main {
         br.lines().forEach(line -> sb.append(line));
         return sb.toString();
     }
+
 }
