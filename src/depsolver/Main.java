@@ -3,7 +3,6 @@ package depsolver;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -34,7 +33,6 @@ public class Main {
         List<String> initial = JSON.parseObject(readFile(args[1]), strListType);
         List<String> constraints = JSON.parseObject(readFile(args[2]), strListType);
 
-        System.out.println("test");
         ArrayList<Package> resolved = new ArrayList<>();
         List<String> commands = new ArrayList<>();
 
