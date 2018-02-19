@@ -58,7 +58,7 @@ public class Main {
 
         }
         for (Package p: resolved) {
-            commands.add("+" + p.getName());
+            commands.add("+" + p.getName() + "=" + p.getVersion());
         }
 
         String jsonCommands = JSON.toJSONString(commands);
