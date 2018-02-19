@@ -57,7 +57,8 @@ public class Main {
             }
         }
 
-
+        // TODO: Work on chosing a path currently we do both paths in an OR for the required state
+        // TODO: E.G IT DOES A ->B AND C it should chose one of them
         for (Package p: resolved) {
             commands.addAll(resolveInitial(initial,p,repo));
             commands.add("+" + p.getName() + "=" + p.getVersion());
