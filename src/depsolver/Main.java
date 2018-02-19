@@ -14,25 +14,25 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        String currentTest = "seen-4";
-
-        // Allows debugging rather than commandline args
-        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
-        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
-        String initPath = basePath + "/tests/" + currentTest +"/initial.json";
-        String constPath = basePath + "/tests/" + currentTest +"/constraints.json";
+//        String currentTest = "seen-4";
+//
+//        // Allows debugging rather than commandline args
+//        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
+//        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
+//        String initPath = basePath + "/tests/" + currentTest +"/initial.json";
+//        String constPath = basePath + "/tests/" + currentTest +"/constraints.json";
+//
+//        TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
+//        List<Package> repo = JSON.parseObject(readFile(repoPath), repoType);
+//        TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
+//        List<String> initial = JSON.parseObject(readFile(initPath), strListType);
+//        List<String> constraints = JSON.parseObject(readFile(constPath), strListType);
 
         TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
-        List<Package> repo = JSON.parseObject(readFile(repoPath), repoType);
+        List<Package> repo = JSON.parseObject(readFile(args[0]), repoType);
         TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
-        List<String> initial = JSON.parseObject(readFile(initPath), strListType);
-        List<String> constraints = JSON.parseObject(readFile(constPath), strListType);
-
-//        TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
-//        List<Package> repo = JSON.parseObject(readFile(args[0]), repoType);
-//        TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
-//        List<String> initial = JSON.parseObject(readFile(args[1]), strListType);
-//        List<String> constraints = JSON.parseObject(readFile(args[2]), strListType);
+        List<String> initial = JSON.parseObject(readFile(args[1]), strListType);
+        List<String> constraints = JSON.parseObject(readFile(args[2]), strListType);
 
         ArrayList<Package> resolved = new ArrayList<>();
         List<String> commands = new ArrayList<>();
