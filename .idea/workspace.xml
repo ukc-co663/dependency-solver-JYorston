@@ -2,30 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="20478198-f691-4a4a-b6d0-12cad35d12a4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/.gitignore" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/LICENSE" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/Makefile" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/README.md" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/compile.sh" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/deps" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/depsolver.iml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/install_deps.sh" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/run_tests.sh" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/solve" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Main.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Package.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/constraints.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/initial.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/repository.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/constraints.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/initial.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/repository.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-3/constraints.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-3/initial.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-3/repository.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-4/constraints.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-4/initial.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-4/repository.json" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/fastjson_1_2_45.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/deps" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/depsolver.iml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/production/depsolver/depsolver/Main$1.class" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/production/depsolver/depsolver/Main$2.class" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/production/depsolver/depsolver/Main.class" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/production/depsolver/depsolver/Package.class" afterPath="" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="dependency-solver-JYorston.iml" />
@@ -45,11 +32,9 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/depsolver/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="108">
+              <caret line="6" column="27" lean-forward="false" selection-start-line="6" selection-start-column="27" selection-end-line="6" selection-end-column="27" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -83,11 +68,11 @@
         <option value="$PROJECT_DIR$/solve" />
         <option value="$PROJECT_DIR$/Package.java" />
         <option value="$PROJECT_DIR$/Main.java" />
-        <option value="$PROJECT_DIR$/src/depsolver/Main.java" />
         <option value="$PROJECT_DIR$/src/depsolver/Package.java" />
         <option value="$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/repository.json" />
         <option value="$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Package.java" />
         <option value="$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Main.java" />
+        <option value="$PROJECT_DIR$/src/depsolver/Main.java" />
       </list>
     </option>
   </component>
@@ -118,6 +103,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -125,35 +111,23 @@
               <item name="dependency-solver-JYorston" type="b2602c69:ProjectViewProjectNode" />
               <item name="dependency-solver-JYorston" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="dependency-solver-JYorston" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dependency-solver-JYorston" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dependency-solver-JYorston" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dependency-solver-JYorston" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="depsolver" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
       <pane id="AndroidView" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Ignored.Files" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/fastjson-1.2.45.jar!/" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -272,18 +246,6 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="dependency-solver-JYorston" />
-      <envs />
-    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -324,6 +286,18 @@
       <option name="PROGRAM_PARAMETERS" />
       <predefined_log_file id="idea.log" enabled="true" />
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="dependency-solver-JYorston" />
+      <envs />
+    </configuration>
     <list size="2">
       <item index="0" class="java.lang.String" itemvalue="Application.Main" />
       <item index="1" class="java.lang.String" itemvalue="Application.Main (1)" />
@@ -354,7 +328,8 @@
       <workItem from="1517587620066" duration="600000" />
       <workItem from="1518602274229" duration="17705000" />
       <workItem from="1518800738314" duration="2169000" />
-      <workItem from="1518973632776" duration="3932000" />
+      <workItem from="1518973632776" duration="4606000" />
+      <workItem from="1519032841382" duration="779000" />
     </task>
     <task id="LOCAL-00001" summary="setup linux env">
       <created>1516790623503</created>
@@ -402,37 +377,36 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31170000" />
+    <option name="totallyTimeSpent" value="32623000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="687" y="-4" width="2497" height="1452" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21823618" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295711" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21823618" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14028056" sideWeight="0.4960981" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14028056" sideWeight="0.4960981" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39910313" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14028056" sideWeight="0.5039019" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39910313" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -485,23 +459,7 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="36" column="58" lean-forward="false" selection-start-line="36" selection-start-column="58" selection-end-line="36" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Package.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="39" lean-forward="true" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/constraints.json">
+    <entry file="file://$PROJECT_DIR$/src/depsolver/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -509,60 +467,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/initial.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/repository.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Package.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="22" column="1" lean-forward="false" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/constraints.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-3/repository.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/initial.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Main.java" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Package.java" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/constraints.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/initial.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/repository.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Main.java" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Package.java" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/constraints.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-3/repository.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/initial.json" />
     <entry file="file://$PROJECT_DIR$/src/depsolver/Main.java" />
     <entry file="file://$PROJECT_DIR$/src/depsolver/Main.java" />
     <entry file="file://$PROJECT_DIR$/src/com/company/Main.java" />
@@ -575,137 +489,30 @@
     <entry file="file://$PROJECT_DIR$/makefile" />
     <entry file="file://$PROJECT_DIR$/out/Package.java" />
     <entry file="file://$PROJECT_DIR$/src/depsolver/Package.java" />
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/solve">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/run_tests.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="3" column="64" lean-forward="true" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/solve" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/run_tests.sh" />
     <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/example-0/constraints.json" />
     <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/example-0/initial.json" />
     <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/example-0/commands.json" />
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/initial.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/repository.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" column="16" lean-forward="false" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/constraints.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-3/constraints.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-3/initial.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/repository.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="17" column="18" lean-forward="true" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/initial.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-4/initial.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-4/repository.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="31" lean-forward="true" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/constraints.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-3/repository.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Package.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="30" column="17" lean-forward="false" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-4/constraints.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="37" column="52" lean-forward="true" selection-start-line="37" selection-start-column="52" selection-end-line="37" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/initial.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/repository.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-0/constraints.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-3/constraints.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-3/initial.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/repository.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/initial.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-4/initial.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-4/repository.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/custom/constraints.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-3/repository.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Package.java" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/tests/seen-4/constraints.json" />
+    <entry file="file://$PROJECT_DIR$/depsolver-StartJava-master/src/depsolver/Main.java" />
     <entry file="file://$PROJECT_DIR$/src/depsolver/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="108">
+          <caret line="6" column="27" lean-forward="false" selection-start-line="6" selection-start-column="27" selection-end-line="6" selection-end-column="27" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -761,7 +568,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>depsolver</last-edited>
+          <last-edited>dependency-solver-JYorston</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
