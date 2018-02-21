@@ -5,6 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -14,25 +15,25 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        String currentTest = "seen-4";
-
-        // Allows debugging rather than commandline args
-        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
-        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
-        String initPath = basePath + "/tests/" + currentTest +"/initial.json";
-        String constPath = basePath + "/tests/" + currentTest +"/constraints.json";
+//        String currentTest = "seen-5";
+//
+//        // Allows debugging rather than commandline args
+//        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
+//        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
+//        String initPath = basePath + "/tests/" + currentTest +"/initial.json";
+//        String constPath = basePath + "/tests/" + currentTest +"/constraints.json";
+//
+//        TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
+//        List<Package> repo = JSON.parseObject(readFile(repoPath), repoType);
+//        TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
+//        List<String> initial = JSON.parseObject(readFile(initPath), strListType);
+//        List<String> constraints = JSON.parseObject(readFile(constPath), strListType);
 
         TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
-        List<Package> repo = JSON.parseObject(readFile(repoPath), repoType);
+        List<Package> repo = JSON.parseObject(readFile(args[0]), repoType);
         TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
-        List<String> initial = JSON.parseObject(readFile(initPath), strListType);
-        List<String> constraints = JSON.parseObject(readFile(constPath), strListType);
-
-//        TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
-//        List<Package> repo = JSON.parseObject(readFile(args[0]), repoType);
-//        TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
-//        List<String> initial = JSON.parseObject(readFile(args[1]), strListType);
-//        List<String> constraints = JSON.parseObject(readFile(args[2]), strListType);
+        List<String> initial = JSON.parseObject(readFile(args[1]), strListType);
+        List<String> constraints = JSON.parseObject(readFile(args[2]), strListType);
 
 //        ArrayList<Package> resolved = new ArrayList<>();
 //        List<String> commands = new ArrayList<>();
@@ -57,7 +58,7 @@ public class Main {
 //            }
 //        }
 //
-//        // TODO: Work on chosing a path currently we do both paths in an OR for the required state
+//        // TODO: Work on choosing a path currently we do both paths in an OR for the required state
 //        // TODO: E.G IT DOES A ->B AND C it should chose one of them
 //        for (Package p: resolved) {
 //            commands.addAll(resolveInitial(initial,p,repo));
@@ -71,11 +72,40 @@ public class Main {
 
         List<List<String>> paths = search(initialSet,repo,new HashSet<>(),constraints, new ArrayList<>());
 
+        BigInteger lowestCost = null;
+        List<String> lowestPath = null;
         for (List<String> path:paths) {
-            String jsonPath = JSON.toJSONString(path);
-            System.out.println(jsonPath);
+            if(lowestCost == null){
+                lowestCost = calcCost(path,repo);
+                lowestPath = path;
+            }
+            else {
+                BigInteger cost = calcCost(path, repo);
+                int res = cost.compareTo(lowestCost);
+                if (res == -1) {
+                    lowestCost = cost;
+                    lowestPath = path;
+                }
+            }
         }
 
+        String jsonPath = JSON.toJSONString(lowestPath);
+        System.out.println(jsonPath);
+
+    }
+
+    public static BigInteger calcCost(List<String> path, List<Package> repo){
+        BigInteger cost = new BigInteger("0");
+        for (String s:path) {
+            if(s.charAt(0) == '-'){
+                cost = cost.add(new BigInteger("1000000"));
+            }
+            else{
+                Package p = getPackageFromString(s.substring(1,s.length()),repo);
+                cost = cost.add(new BigInteger(p.getSize().toString()));
+            }
+        }
+        return cost;
     }
 
     /**
@@ -216,35 +246,6 @@ public class Main {
         return containsNone;
     }
 
-
-
-
-    /**
-     * Get the initial state into a valid
-     * state so that a package can be installed
-     * @param initial
-     * @param p
-     * @param repo
-     * @return commands to make the inital state valid for given package
-     */
-    public static List<String> resolveInitial(List<String> initial, Package p, List<Package> repo){
-        List<Package> conflicts = parseConflicts(p.getConflicts(),repo);
-        List<Package> initialPackages = parsePackageString(initial,repo);
-
-
-        List<String> commands = new ArrayList<>();
-        for (Package init:initialPackages) {
-            if(conflicts.contains(init)){
-                if(init.getVersionAsInt() > 0) {
-                    commands.add("-" + init.getName() + "=" +init.getVersion());
-                }
-                else{
-                    commands.add("-" + init.getName());
-                }
-            }
-        }
-        return commands;
-    }
 
     /**
      * Parse initial state into hashset of packages
@@ -394,68 +395,6 @@ public class Main {
     }
 
     /**
-     * Turn packagestring into list of packages
-     * @param packageString
-     * @param repo
-     * @return
-     */
-    public static List<Package> parsePackageString(List<String> packageString, List<Package> repo){
-
-        List<Package> packageList = new ArrayList<>();
-
-        for (String s:packageString) {
-            Package p = getPackageFromString(s,repo);
-            packageList.add(p);
-        }
-
-        return packageList;
-    }
-
-
-    /**
-     * Navigates through constraint building
-     * dependency tree
-     * if a cycle detected add to bad nodes
-     * if we resolve a dependency tree at to resolved
-     * @param constraint
-     * @param repo
-     * @param unresolved
-     * @param resolved
-     * @param badNodes
-     */
-    private static void solve(Package constraint, List<Package> repo, List<Package> unresolved, List<Package> resolved, List<Package> badNodes){
-        unresolved.add(constraint);
-        for (List<String> dependencies:constraint.getDepends()) {
-            for(String dep: dependencies){
-                Package current = getPackageFromString(dep,repo);
-                if(!resolved.contains(current)) {
-                    if (unresolved.contains(current)) {
-                        badNodes.add(constraint);
-                        break;
-                    }
-                    solve(current, repo, unresolved,resolved, badNodes);
-                }
-            }
-        }
-        resolved.add(constraint);
-        unresolved.remove(constraint);
-    }
-
-
-
-    /**
-     * Parse a constraint to get package name
-     * @param constraint
-     * @param repo
-     * @return
-     */
-    public static Package parseConstraint(String constraint, List<Package> repo){
-        // TODO: Add actual functionality this will just get name
-        return getPackageFromString(constraint.substring(1,2),repo);
-    }
-
-
-    /**
      * Get the package details from repository
      * @param packageString
      * @param repo
@@ -496,5 +435,97 @@ public class Main {
         br.lines().forEach(line -> sb.append(line));
         return sb.toString();
     }
+
+
+//    /**
+//     * Turn packagestring into list of packages
+//     * @param packageString
+//     * @param repo
+//     * @return
+//     */
+//    public static List<Package> parsePackageString(List<String> packageString, List<Package> repo){
+//
+//        List<Package> packageList = new ArrayList<>();
+//
+//        for (String s:packageString) {
+//            Package p = getPackageFromString(s,repo);
+//            packageList.add(p);
+//        }
+//
+//        return packageList;
+//    }
+//
+
+//
+//    /**
+//     * Get the initial state into a valid
+//     * state so that a package can be installed
+//     * @param initial
+//     * @param p
+//     * @param repo
+//     * @return commands to make the inital state valid for given package
+//     */
+//    public static List<String> resolveInitial(List<String> initial, Package p, List<Package> repo){
+//        List<Package> conflicts = parseConflicts(p.getConflicts(),repo);
+//        List<Package> initialPackages = parsePackageString(initial,repo);
+//
+//
+//        List<String> commands = new ArrayList<>();
+//        for (Package init:initialPackages) {
+//            if(conflicts.contains(init)){
+//                if(init.getVersionAsInt() > 0) {
+//                    commands.add("-" + init.getName() + "=" +init.getVersion());
+//                }
+//                else{
+//                    commands.add("-" + init.getName());
+//                }
+//            }
+//        }
+//        return commands;
+//    }
+//
+
+
+//    /**
+//     * Navigates through constraint building
+//     * dependency tree
+//     * if a cycle detected add to bad nodes
+//     * if we resolve a dependency tree at to resolved
+//     * @param constraint
+//     * @param repo
+//     * @param unresolved
+//     * @param resolved
+//     * @param badNodes
+//     */
+//    private static void solve(Package constraint, List<Package> repo, List<Package> unresolved, List<Package> resolved, List<Package> badNodes){
+//        unresolved.add(constraint);
+//        for (List<String> dependencies:constraint.getDepends()) {
+//            for(String dep: dependencies){
+//                Package current = getPackageFromString(dep,repo);
+//                if(!resolved.contains(current)) {
+//                    if (unresolved.contains(current)) {
+//                        badNodes.add(constraint);
+//                        break;
+//                    }
+//                    solve(current, repo, unresolved,resolved, badNodes);
+//                }
+//            }
+//        }
+//        resolved.add(constraint);
+//        unresolved.remove(constraint);
+//    }
+//
+//
+//
+//    /**
+//     * Parse a constraint to get package name
+//     * @param constraint
+//     * @param repo
+//     * @return
+//     */
+//    public static Package parseConstraint(String constraint, List<Package> repo){
+//        // TODO: Add actual functionality this will just get name
+//        return getPackageFromString(constraint.substring(1,2),repo);
+//    }
 
 }
