@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-//        String currentTest = "seen-5";
+//        String currentTest = "seen-2";
 //
 //        // Allows debugging rather than commandline args
 //        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
@@ -203,22 +203,24 @@ public class Main {
         HashSet<Package> newState = new HashSet<>(state);
         if(state.contains(current)){
             newState.remove(current);
-            if(current.getVersionAsInt() > 0) {
-                commands.add("-" + current.getName() + "=" +current.getVersion());
-            }
-            else{
-                commands.add("-" + current.getName());
-            }
+//            if(current.getVersionAsInt() > 0) {
+//                commands.add("-" + current.getName() + "=" +current.getVersion());
+//            }
+//            else{
+//                commands.add("-" + current.getName());
+//            }
+            commands.add("-" + current.getName() + "=" +current.getVersion());
 
         }
         else{
             newState.add(current);
-            if(current.getVersionAsInt() > 0) {
-                commands.add("+" + current.getName() + "=" +current.getVersion());
-            }
-            else{
-                commands.add("+" + current.getName());
-            }
+//            if(current.getVersionAsInt() > 0) {
+//                commands.add("+" + current.getName() + "=" +current.getVersion());
+//            }
+//            else{
+//                commands.add("+" + current.getName());
+//            }
+            commands.add("+" + current.getName() + "=" +current.getVersion());
         }
 
         return newState;
