@@ -12,15 +12,15 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-
-//        String currentTest = "seen-1";
 //
-//        // Allows debugging rather than commandline args
+//        String currentTest = "seen-9";
+
+        // Allows debugging rather than commandline args
 //        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
 //        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
 //        String initPath = basePath + "/tests/" + currentTest +"/initial.json";
 //        String constPath = basePath + "/tests/" + currentTest +"/constraints.json";
-//
+////
 //        TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
 //        List<Package> repo = JSON.parseObject(readFile(repoPath), repoType);
 //        TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
@@ -38,7 +38,7 @@ public class Main {
 
         // Generate all paths
         ConstraintSet cs = new ConstraintSet(constraints,packageMap);
-        List<List<String>> paths = search(initialSet,repo,new HashSet<>(),cs, new ArrayList<>());
+        List<List<String>> paths = search(initialSet,repo, packageMap,new HashSet<>(),cs, new ArrayList<>());
 
         // Calculate the min cost path
         List<String> lowestPath = getLowestCostPath(paths,packageMap);
@@ -105,8 +105,8 @@ public class Main {
      * @param commands commands of a path
      * @return list of all paths
      */
-    public static List<List<String>> search(HashSet<Package> state, List<Package> repo, HashSet<HashSet<Package>> seen, ConstraintSet cs, List<String> commands){
-        if(!validState(state,repo)){
+    public static List<List<String>> search(HashSet<Package> state, List<Package> repo, HashMap<String,Package> packageMap, HashSet<HashSet<Package>> seen, ConstraintSet cs, List<String> commands){
+        if(!validState(state,repo,packageMap)){
             return null;
         }
         if(seen.contains(state)){
@@ -132,7 +132,7 @@ public class Main {
             List<String> nextCommands = new ArrayList<>(commands);
             HashSet<Package> tempState = flipState(state,p,nextCommands);
 
-            List<List<String>> result = search(tempState,repo,seen,cs,nextCommands);
+            List<List<String>> result = search(tempState,repo,packageMap,seen,cs,nextCommands);
 
             if(result != null) {
                 solutions.addAll(result);
@@ -148,11 +148,11 @@ public class Main {
      * @param repo the repository
      * @return true if valid state
      */
-    public static boolean validState(HashSet<Package> state,List<Package> repo){
+    public static boolean validState(HashSet<Package> state,List<Package> repo, HashMap<String,Package> packageMap){
         boolean isValid = true;
         for (Package p : state) {
-            List<Package> conflicts = parseDepConField(p.getConflicts(),repo);
-            List<List<Package>> depends = parseDepends(p.getDepends(), repo);
+            List<Package> conflicts = parseDepConField(p.getConflicts(),repo, packageMap);
+            List<List<Package>> depends = parseDepends(p.getDepends(), repo, packageMap);
 
             for (Package conflict:conflicts) {
                 if(state.contains(conflict)){
@@ -250,12 +250,12 @@ public class Main {
      * @param repo the repository
      * @return list of list of packages
      */
-    public static List<List<Package>> parseDepends(List<List<String>> depends, List<Package> repo){
+    public static List<List<Package>> parseDepends(List<List<String>> depends, List<Package> repo,HashMap<String,Package> packageMap){
 
         List<List<Package>> dependsList = new ArrayList<>();
 
         for (List<String> branch:depends){
-            List<Package> packageBranch = parseDepConField(branch,repo);
+            List<Package> packageBranch = parseDepConField(branch,repo, packageMap);
             dependsList.add(packageBranch);
         }
 
@@ -269,7 +269,7 @@ public class Main {
      * @param repo the repo
      * @return list of packages
      */
-    public static List<Package> parseDepConField(List<String> field, List<Package> repo){
+    public static List<Package> parseDepConField(List<String> field, List<Package> repo, HashMap<String,Package> packageMap){
         List<Package> packageList = new ArrayList<>();
 
         for (String s:field) {
@@ -329,28 +329,9 @@ public class Main {
                     }
                 }
             }
-            else if(s.contains("=")){
-                String[] parts = s.split("=");
-                String pName = parts[0];
-                String vNum = parts[1];
-
-                for (Package p:repo) {
-                    if(p.getName().equals(pName)) {
-                        if (p.getVersionAsInt() == getVersionAsInt(vNum)) {
-                            packageList.add(p);
-                            break;
-                        }
-                    }
-                }
-            }
             else{
-                for (Package p:repo) {
-                    if(p.getName().equals(s)){
-                            packageList.add(p);
-                        }
-                    }
-                }
-
+                packageList.add(getPackageFromString(s,packageMap));
+            }
         }
 
         return packageList;
@@ -362,12 +343,15 @@ public class Main {
      * @return version number as int
      */
     public static int getVersionAsInt(String version){
-        String[] digits = version.split("\\.");
-
         int total = 0;
-        for(int i=0; i < digits.length; i++){
-            total = 10*total + Integer.valueOf(digits[i]);
+
+        if(!version.equals("")) {
+            String[] digits = version.split("\\.");
+            for (int i = 0; i < digits.length; i++) {
+                total = 10 * total + Integer.valueOf(digits[i]);
+            }
         }
+
         return total;
     }
 
@@ -399,7 +383,14 @@ public class Main {
             }
         }
 
-        return packageMap.get(name+"="+getVersionAsInt(version));
+//        System.out.println("PString:");
+//        System.out.println(packageString);
+//        System.out.println("name:");
+//        System.out.println(name);
+//        System.out.println("version:");
+//        System.out.println(version);
+
+        return packageMap.get(name + "=" + getVersionAsInt(version));
     }
 
     /**
