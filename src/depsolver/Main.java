@@ -11,11 +11,9 @@ import java.util.*;
 
 public class Main {
 
-    private static final Comparator<Package> _DEPENDCOMP = (p1,p2) -> Integer.compare(p1.getDepends().size(), p2.getDepends().size());
-
     public static void main(String[] args) throws IOException {
 
-//        String currentTest = "seen-2";
+//        String currentTest = "seen-9";
 //
 //        // Allows debugging rather than commandline args
 //        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
@@ -35,52 +33,38 @@ public class Main {
         List<String> initial = JSON.parseObject(readFile(args[1]), strListType);
         List<String> constraints = JSON.parseObject(readFile(args[2]), strListType);
 
-//        ArrayList<Package> resolved = new ArrayList<>();
-//        List<String> commands = new ArrayList<>();
-//
-//        for (String s :constraints) {
-//            Package constraint = parseConstraint(s,repo);
-//            List<Package> badPackages = new ArrayList<>();
-//            solve(constraint,repo, new ArrayList<>(), resolved, badPackages);
-//
-//
-//            for (Package bp:badPackages) {
-//                ListIterator<Package> it = resolved.listIterator();
-//                while(it.hasNext()){
-//                    Package next = it.next();
-//                    if(next.getName().equals(bp.getName())){
-//                        it.remove();
-//                    }
-//                    else if(next.dependsOnPackage(bp)){
-//                        it.remove();
-//                    }
-//                }
-//            }
-//        }
-//
-//        // TODO: Work on choosing a path currently we do both paths in an OR for the required state
-//        // TODO: E.G IT DOES A ->B AND C it should chose one of them
-//        for (Package p: resolved) {
-//            commands.addAll(resolveInitial(initial,p,repo));
-//            commands.add("+" + p.getName() + "=" + p.getVersion());
-//        }
-//
-//        String jsonCommands = JSON.toJSONString(commands);
-//        System.out.print(jsonCommands);
+        HashMap<String,Package> packageMap = buildPackageMap(repo);
+        HashSet<Package> initialSet = parseInitial(initial,packageMap);
 
-        HashSet<Package> initialSet = parseInitial(initial,repo);
+        // Generate all paths
+        ConstraintSet cs = new ConstraintSet(constraints,packageMap);
+        List<List<String>> paths = search(initialSet,repo,new HashSet<>(),cs, new ArrayList<>());
 
-        List<List<String>> paths = search(initialSet,repo,new HashSet<>(),constraints, new ArrayList<>());
+        // Calculate the min cost path
+        List<String> lowestPath = getLowestCostPath(paths,packageMap);
+
+        String jsonPath = JSON.toJSONString(lowestPath);
+        System.out.println(jsonPath);
+
+    }
+
+    /**
+     * Return the lowest cost path in a list of paths
+     * @param paths the possible paths
+     * @param packageMap the repository
+     * @return the lowest cost path
+     */
+    private static List<String> getLowestCostPath(List<List<String>> paths, HashMap<String,Package> packageMap){
 
         BigInteger lowestCost = null;
         List<String> lowestPath = null;
         for (List<String> path:paths) {
             if(lowestCost == null){
-                lowestCost = calcCost(path,repo);
+                lowestCost = calcCost(path,packageMap);
                 lowestPath = path;
             }
             else {
-                BigInteger cost = calcCost(path, repo);
+                BigInteger cost = calcCost(path, packageMap);
                 int res = cost.compareTo(lowestCost);
                 if (res == -1) {
                     lowestCost = cost;
@@ -89,19 +73,23 @@ public class Main {
             }
         }
 
-        String jsonPath = JSON.toJSONString(lowestPath);
-        System.out.println(jsonPath);
-
+        return lowestPath;
     }
 
-    public static BigInteger calcCost(List<String> path, List<Package> repo){
+    /**
+     * Calculate the cost of the path
+     * @param path
+     * @param packageMap
+     * @return
+     */
+    public static BigInteger calcCost(List<String> path, HashMap<String,Package> packageMap){
         BigInteger cost = new BigInteger("0");
         for (String s:path) {
             if(s.charAt(0) == '-'){
                 cost = cost.add(new BigInteger("1000000"));
             }
             else{
-                Package p = getPackageFromString(s.substring(1,s.length()),repo);
+                Package p = getPackageFromString(s.substring(1,s.length()),packageMap);
                 cost = cost.add(new BigInteger(p.getSize().toString()));
             }
         }
@@ -113,11 +101,11 @@ public class Main {
      * @param state the state of repo
      * @param repo the repo
      * @param seen seen states
-     * @param constraints the constraints we are trying to fill
+     * @param cs the constraint set
      * @param commands commands of a path
      * @return list of all paths
      */
-    public static List<List<String>> search(HashSet<Package> state, List<Package> repo, HashSet<HashSet<Package>> seen, List<String> constraints, List<String> commands){
+    public static List<List<String>> search(HashSet<Package> state, List<Package> repo, HashSet<HashSet<Package>> seen, ConstraintSet cs, List<String> commands){
         if(!validState(state,repo)){
             return null;
         }
@@ -127,7 +115,6 @@ public class Main {
 
         // Add to seen to stop infinite loop & generate constraintSet
         seen.add(state);
-        ConstraintSet cs = new ConstraintSet(constraints,repo);
 
         // Does the current state satisfy required packages
         if(state.containsAll(cs.getRequiredPackages())){
@@ -145,7 +132,7 @@ public class Main {
             List<String> nextCommands = new ArrayList<>(commands);
             HashSet<Package> tempState = flipState(state,p,nextCommands);
 
-            List<List<String>> result = search(tempState,repo,seen,constraints,nextCommands);
+            List<List<String>> result = search(tempState,repo,seen,cs,nextCommands);
 
             if(result != null) {
                 solutions.addAll(result);
@@ -157,14 +144,14 @@ public class Main {
 
     /**
      * Test whether the current state is valid or not
-     * @param state
-     * @param repo
+     * @param state a state to test
+     * @param repo the repository
      * @return true if valid state
      */
     public static boolean validState(HashSet<Package> state,List<Package> repo){
         boolean isValid = true;
         for (Package p : state) {
-            List<Package> conflicts = parseConflicts(p.getConflicts(),repo);
+            List<Package> conflicts = parseDepConField(p.getConflicts(),repo);
             List<List<Package>> depends = parseDepends(p.getDepends(), repo);
 
             for (Package conflict:conflicts) {
@@ -203,23 +190,11 @@ public class Main {
         HashSet<Package> newState = new HashSet<>(state);
         if(state.contains(current)){
             newState.remove(current);
-//            if(current.getVersionAsInt() > 0) {
-//                commands.add("-" + current.getName() + "=" +current.getVersion());
-//            }
-//            else{
-//                commands.add("-" + current.getName());
-//            }
             commands.add("-" + current.getName() + "=" +current.getVersion());
 
         }
         else{
             newState.add(current);
-//            if(current.getVersionAsInt() > 0) {
-//                commands.add("+" + current.getName() + "=" +current.getVersion());
-//            }
-//            else{
-//                commands.add("+" + current.getName());
-//            }
             commands.add("+" + current.getName() + "=" +current.getVersion());
         }
 
@@ -252,15 +227,15 @@ public class Main {
     /**
      * Parse initial state into hashset of packages
      * @param initial
-     * @param repo
+     * @param packageMap
      * @return
      */
-    public static HashSet<Package> parseInitial(List<String> initial, List<Package> repo){
+    public static HashSet<Package> parseInitial(List<String> initial, HashMap<String,Package> packageMap){
 
         HashSet<Package> initialSet = new HashSet<>();
 
         for (String s:initial) {
-            Package p = getPackageFromString(s,repo);
+            Package p = getPackageFromString(s,packageMap);
             initialSet.add(p);
         }
 
@@ -280,7 +255,7 @@ public class Main {
         List<List<Package>> dependsList = new ArrayList<>();
 
         for (List<String> branch:depends){
-            List<Package> packageBranch = parseConflicts(branch,repo);
+            List<Package> packageBranch = parseDepConField(branch,repo);
             dependsList.add(packageBranch);
         }
 
@@ -289,15 +264,15 @@ public class Main {
 
 
     /**
-     * Parse a conflicts field into a list of packages
-     * @param conflicts conflicts field
+     * Parse a  dependency/conflicts field into a list of packages
+     * @param field dep/conflicts field
      * @param repo the repo
      * @return list of packages
      */
-    public static List<Package> parseConflicts(List<String> conflicts, List<Package> repo){
+    public static List<Package> parseDepConField(List<String> field, List<Package> repo){
         List<Package> packageList = new ArrayList<>();
 
-        for (String s:conflicts) {
+        for (String s:field) {
             if(s.contains("<=")){
                 String[] parts = s.split("<=");
                 String pName = parts[0];
@@ -398,37 +373,50 @@ public class Main {
 
     /**
      * Get the package details from repository
-     * @param packageString
-     * @param repo
-     * @return
+     * @param packageString string to parse
+     * @param packageMap the repository as map
+     * @return package string to package object
      */
-    public static Package getPackageFromString(String packageString, List<Package> repo){
+    public static Package getPackageFromString(String packageString, HashMap<String,Package> packageMap){
 
         String name = packageString;
         String version = "";
 
+        // If version is specified lookup in map
         if(packageString.contains("=")){
             String [] parts = packageString.split("=");
             name = parts[0];
             version = parts[1];
         }
-
-        Package returnPackage = null;
-        for(Package p: repo){
-            if(p.getName().equals(name)){
-                if(version.equals("")){
-                    returnPackage = p;
+        else{ // Otherwise we have to lookup O(n)
+            for (String key:packageMap.keySet()) {
+                String [] parts = key.split("=");
+                name = parts[0];
+                if(name.equals(packageString)){
+                    version = parts[1];
                     break;
-                }
-                else{
-                    if(p.getVersion().equals(version)){
-                        returnPackage = p;
-                        break;
-                    }
                 }
             }
         }
-        return returnPackage;
+
+        return packageMap.get(name+"="+version);
+    }
+
+    /**
+     * Build a hashmap from string to package object
+     * @param repo the repository
+     * @return package map
+     */
+    public static HashMap<String,Package> buildPackageMap(List<Package> repo){
+        HashMap<String,Package> packageMap = new HashMap<>();
+        for(Package p:repo){
+            String name = p.getName();
+            int version = p.getVersionAsInt();
+
+            packageMap.put(name + "=" + String.valueOf(version),p);
+        }
+
+        return packageMap;
     }
 
     static String readFile(String filename) throws IOException {
@@ -437,97 +425,4 @@ public class Main {
         br.lines().forEach(line -> sb.append(line));
         return sb.toString();
     }
-
-
-//    /**
-//     * Turn packagestring into list of packages
-//     * @param packageString
-//     * @param repo
-//     * @return
-//     */
-//    public static List<Package> parsePackageString(List<String> packageString, List<Package> repo){
-//
-//        List<Package> packageList = new ArrayList<>();
-//
-//        for (String s:packageString) {
-//            Package p = getPackageFromString(s,repo);
-//            packageList.add(p);
-//        }
-//
-//        return packageList;
-//    }
-//
-
-//
-//    /**
-//     * Get the initial state into a valid
-//     * state so that a package can be installed
-//     * @param initial
-//     * @param p
-//     * @param repo
-//     * @return commands to make the inital state valid for given package
-//     */
-//    public static List<String> resolveInitial(List<String> initial, Package p, List<Package> repo){
-//        List<Package> conflicts = parseConflicts(p.getConflicts(),repo);
-//        List<Package> initialPackages = parsePackageString(initial,repo);
-//
-//
-//        List<String> commands = new ArrayList<>();
-//        for (Package init:initialPackages) {
-//            if(conflicts.contains(init)){
-//                if(init.getVersionAsInt() > 0) {
-//                    commands.add("-" + init.getName() + "=" +init.getVersion());
-//                }
-//                else{
-//                    commands.add("-" + init.getName());
-//                }
-//            }
-//        }
-//        return commands;
-//    }
-//
-
-
-//    /**
-//     * Navigates through constraint building
-//     * dependency tree
-//     * if a cycle detected add to bad nodes
-//     * if we resolve a dependency tree at to resolved
-//     * @param constraint
-//     * @param repo
-//     * @param unresolved
-//     * @param resolved
-//     * @param badNodes
-//     */
-//    private static void solve(Package constraint, List<Package> repo, List<Package> unresolved, List<Package> resolved, List<Package> badNodes){
-//        unresolved.add(constraint);
-//        for (List<String> dependencies:constraint.getDepends()) {
-//            for(String dep: dependencies){
-//                Package current = getPackageFromString(dep,repo);
-//                if(!resolved.contains(current)) {
-//                    if (unresolved.contains(current)) {
-//                        badNodes.add(constraint);
-//                        break;
-//                    }
-//                    solve(current, repo, unresolved,resolved, badNodes);
-//                }
-//            }
-//        }
-//        resolved.add(constraint);
-//        unresolved.remove(constraint);
-//    }
-//
-//
-//
-//    /**
-//     * Parse a constraint to get package name
-//     * @param constraint
-//     * @param repo
-//     * @return
-//     */
-//    public static Package parseConstraint(String constraint, List<Package> repo){
-//        // TODO: Add actual functionality this will just get name
-//        return getPackageFromString(constraint.substring(1,2),repo);
-//    }
-
 }

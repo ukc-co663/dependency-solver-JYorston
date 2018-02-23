@@ -1,24 +1,35 @@
 package depsolver;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Constraint set
+ * Parses the contraints field into two distinct
+ * sets of required packages that must be installed
+ * and packages that must not be installed
+ */
 public class ConstraintSet {
     private HashSet<Package> requiredPackages;
     private HashSet<Package> requiredMissingPackages;
 
-    // Build constraints object
-    public ConstraintSet(List<String> constraints, List<Package> repo){
+    /**
+     * Constructor generate sets
+     * @param constraints constraints
+     * @param repo the repository
+     */
+    public ConstraintSet(List<String> constraints, HashMap<String,Package> packageMap){
 
         requiredPackages = new HashSet<>();
         requiredMissingPackages = new HashSet<>();
 
         for (String c:constraints) {
             if(c.charAt(0) == '-'){
-                requiredMissingPackages.add(Main.getPackageFromString(c.substring(1,c.length()),repo));
+                requiredMissingPackages.add(Main.getPackageFromString(c.substring(1,c.length()),packageMap));
             }
             else{
-                requiredPackages.add(Main.getPackageFromString(c.substring(1,c.length()),repo));
+                requiredPackages.add(Main.getPackageFromString(c.substring(1,c.length()),packageMap));
             }
         }
     }
