@@ -12,10 +12,9 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+////
+//        String currentTest = "seen-4";
 //
-//        String currentTest = "seen-9";
-
-        // Allows debugging rather than commandline args
 //        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
 //        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
 //        String initPath = basePath + "/tests/" + currentTest +"/initial.json";
@@ -329,8 +328,15 @@ public class Main {
                     }
                 }
             }
+            else if(s.contains("=")){
+                packageList.add(packageMap.get(s));
+            }
             else{
-                packageList.add(getPackageFromString(s,packageMap));
+                for (Package p:repo) {
+                    if(p.getName().equals(s)){
+                        packageList.add(p);
+                     }
+                }
             }
         }
 
@@ -382,13 +388,6 @@ public class Main {
                 }
             }
         }
-
-//        System.out.println("PString:");
-//        System.out.println(packageString);
-//        System.out.println("name:");
-//        System.out.println(name);
-//        System.out.println("version:");
-//        System.out.println(version);
 
         return packageMap.get(name + "=" + getVersionAsInt(version));
     }
