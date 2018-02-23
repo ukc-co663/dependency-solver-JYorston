@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-//        String currentTest = "seen-9";
+//        String currentTest = "seen-1";
 //
 //        // Allows debugging rather than commandline args
 //        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
@@ -399,7 +399,7 @@ public class Main {
             }
         }
 
-        return packageMap.get(name+"="+version);
+        return packageMap.get(name+"="+getVersionAsInt(version));
     }
 
     /**
