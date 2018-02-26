@@ -12,9 +12,9 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//////
-//        String currentTest = "seen-1";
-//
+////
+        String currentTest = "seen-6";
+
 //        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
 //        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
 //        String initPath = basePath + "/tests/" + currentTest +"/initial.json";
@@ -37,15 +37,53 @@ public class Main {
 
         // Generate all paths
         ConstraintSet cs = new ConstraintSet(constraints,packageMap);
-        List<List<String>> paths = search(initialSet,repo, packageMap,new HashSet<>(),cs, new ArrayList<>());
+        List<List<String>> paths = search(initialSet,repo,new HashSet<>(),cs, new ArrayList<>());
 
         // Calculate the min cost path
         List<String> lowestPath = getLowestCostPath(paths,packageMap);
+        lowestPath = optimisePath(lowestPath);
 
         String jsonPath = JSON.toJSONString(lowestPath);
         System.out.println(jsonPath);
 
     }
+
+    /**
+     * Remove redundant operations from the path
+     * e.g. + A=1 then a -A=1 later
+     * @param path the path
+     * @return optimised path
+     */
+    private static List<String> optimisePath(List<String> path){
+        Set<String> installed = new HashSet<>();
+        Set<String> uninstalled = new HashSet<>();
+
+        for(String command:path){
+            if(command.charAt(0) == '-'){
+                uninstalled.add(command.substring(1,command.length()));
+            }
+            else{
+                installed.add(command.substring(1,command.length()));
+            }
+        }
+
+        // Perform intersection of sets
+        installed.retainAll(uninstalled);
+
+        // Remove redundant commands
+        Iterator<String> it = path.iterator();
+        while(it.hasNext()){
+            String command = it.next();
+            command = command.substring(1,command.length());
+            if(installed.contains(command)){
+                it.remove();
+            }
+
+        }
+
+        return path;
+    }
+
 
     /**
      * Return the lowest cost path in a list of paths
@@ -104,8 +142,8 @@ public class Main {
      * @param commands commands of a path
      * @return list of all paths
      */
-    public static List<List<String>> search(HashSet<Package> state, List<Package> repo, HashMap<String,Package> packageMap, HashSet<HashSet<Package>> seen, ConstraintSet cs, List<String> commands){
-        if(!validState(state,repo,packageMap)){
+    public static List<List<String>> search(HashSet<Package> state, List<Package> repo, HashSet<HashSet<Package>> seen, ConstraintSet cs, List<String> commands){
+        if(!validState(state)){
             return null;
         }
         if(seen.contains(state)){
@@ -131,7 +169,7 @@ public class Main {
             List<String> nextCommands = new ArrayList<>(commands);
             HashSet<Package> tempState = flipState(state,p,nextCommands);
 
-            List<List<String>> result = search(tempState,repo,packageMap,seen,cs,nextCommands);
+            List<List<String>> result = search(tempState,repo,seen,cs,nextCommands);
 
             if(result != null) {
                 solutions.addAll(result);
@@ -144,10 +182,9 @@ public class Main {
     /**
      * Test whether the current state is valid or not
      * @param state a state to test
-     * @param repo the repository
      * @return true if valid state
      */
-    public static boolean validState(HashSet<Package> state,List<Package> repo, HashMap<String,Package> packageMap){
+    public static boolean validState(HashSet<Package> state){
         boolean isValid = true;
         for (Package p : state) {
 
