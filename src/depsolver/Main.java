@@ -41,47 +41,10 @@ public class Main {
 
         // Calculate the min cost path
         List<String> lowestPath = getLowestCostPath(paths,packageMap);
-        lowestPath = optimisePath(lowestPath);
 
         String jsonPath = JSON.toJSONString(lowestPath);
         System.out.println(jsonPath);
 
-    }
-
-    /**
-     * Remove redundant operations from the path
-     * e.g. + A=1 then a -A=1 later
-     * @param path the path
-     * @return optimised path
-     */
-    private static List<String> optimisePath(List<String> path){
-        Set<String> installed = new HashSet<>();
-        Set<String> uninstalled = new HashSet<>();
-
-        for(String command:path){
-            if(command.charAt(0) == '-'){
-                uninstalled.add(command.substring(1,command.length()));
-            }
-            else{
-                installed.add(command.substring(1,command.length()));
-            }
-        }
-
-        // Perform intersection of sets
-        installed.retainAll(uninstalled);
-
-        // Remove redundant commands
-        Iterator<String> it = path.iterator();
-        while(it.hasNext()){
-            String command = it.next();
-            command = command.substring(1,command.length());
-            if(installed.contains(command)){
-                it.remove();
-            }
-
-        }
-
-        return path;
     }
 
 
