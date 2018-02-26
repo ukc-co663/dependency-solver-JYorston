@@ -9,6 +9,8 @@ class Package {
     private Integer size;
     private List<List<String>> depends = new ArrayList<>();
     private List<String> conflicts = new ArrayList<>();
+        private List<List<Package>> dependsAsPackage = new ArrayList<>();
+    private List<Package> conflictsAsPackage = new ArrayList<>();
 
     public String getName() { return name; }
     public String getVersion() { return version; }
@@ -21,22 +23,26 @@ class Package {
     public void setDepends(List<List<String>> depends) { this.depends = depends; }
     public void setConflicts(List<String> conflicts) { this.conflicts = conflicts; }
 
-    public boolean dependsOnPackage(Package p){
 
-        boolean depsOnPackage = false;
-        for (List<String> depList:this.getDepends()) {
-            for (String dep:depList) {
-                if(dep.equals(p.getName())){
-                    depsOnPackage = true;
-                }
-            }
-        }
-
-        return depsOnPackage;
-    }
 
     public int getVersionAsInt(){
         return Main.getVersionAsInt(this.getVersion());
+    }
+
+    public List<List<Package>> getDependsAsPackage() {
+        return dependsAsPackage;
+    }
+
+    public void setDependsAsPackage(List<List<Package>> dependsAsPackage) {
+        this.dependsAsPackage = dependsAsPackage;
+    }
+
+    public List<Package> getConflictsAsPackage() {
+        return conflictsAsPackage;
+    }
+
+    public void setConflictsAsPackage(List<Package> conflictsAsPackage) {
+        this.conflictsAsPackage = conflictsAsPackage;
     }
 
 }

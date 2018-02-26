@@ -12,8 +12,8 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-////
-//        String currentTest = "seen-4";
+//////
+//        String currentTest = "seen-1";
 //
 //        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
 //        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
@@ -117,7 +117,7 @@ public class Main {
 
         // Does the current state satisfy required packages
         if(state.containsAll(cs.getRequiredPackages())){
-            if(setContainsNone(state,cs.getRequiredMissingPackages())){
+            if(Collections.disjoint(state,cs.getRequiredMissingPackages())){
                 List<List<String>> finalCommands = new ArrayList<>();
                 finalCommands.add(commands);
                 return finalCommands;
@@ -150,10 +150,8 @@ public class Main {
     public static boolean validState(HashSet<Package> state,List<Package> repo, HashMap<String,Package> packageMap){
         boolean isValid = true;
         for (Package p : state) {
-            List<Package> conflicts = parseDepConField(p.getConflicts(),repo, packageMap);
-            List<List<Package>> depends = parseDepends(p.getDepends(), repo, packageMap);
 
-            for (Package conflict:conflicts) {
+            for (Package conflict:p.getConflictsAsPackage()) {
                 if(state.contains(conflict)){
                     isValid = false;
                     break;
@@ -161,7 +159,7 @@ public class Main {
             }
 
             // Check that all dependencies are satisfied, and at least one in an or branch
-            for (List<Package> orBranch: depends) {
+            for (List<Package> orBranch: p.getDependsAsPackage()) {
                 boolean containsOne = false;
                 for (Package dep: orBranch) {
                     if(state.contains(dep)){
@@ -199,29 +197,6 @@ public class Main {
 
         return newState;
     }
-
-    /**
-     * Check set x and set y share no elements
-     * @param x first
-     * @param y second
-     * @return true if x contains no elements of y
-     */
-    public static boolean setContainsNone(HashSet<Package> x, HashSet<Package> y){
-
-        boolean containsNone = true;
-
-        for (Package xP:x) {
-            for (Package yP:y) {
-                if(xP == yP){
-                    containsNone = false;
-                    break;
-                }
-            }
-        }
-
-        return containsNone;
-    }
-
 
     /**
      * Parse initial state into hashset of packages
@@ -329,7 +304,18 @@ public class Main {
                 }
             }
             else if(s.contains("=")){
-                packageList.add(packageMap.get(s));
+                String[] parts = s.split("=");
+                String pName = parts[0];
+                String vNum = parts[1];
+
+                for (Package p:repo) {
+                    if(p.getName().equals(pName)) {
+                        if (p.getVersionAsInt() == getVersionAsInt(vNum)) {
+                            packageList.add(p);
+                            break;
+                        }
+                    }
+                }
             }
             else{
                 for (Package p:repo) {
@@ -402,6 +388,11 @@ public class Main {
         for(Package p:repo){
             String name = p.getName();
             int version = p.getVersionAsInt();
+
+            List<Package> conflicts = parseDepConField(p.getConflicts(),repo, packageMap);
+            List<List<Package>> depends = parseDepends(p.getDepends(), repo, packageMap);
+            p.setConflictsAsPackage(conflicts);
+            p.setDependsAsPackage(depends);
 
             packageMap.put(name + "=" + String.valueOf(version),p);
         }
