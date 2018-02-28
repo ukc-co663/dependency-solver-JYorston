@@ -2,6 +2,8 @@ package depsolver;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,9 +14,9 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-////
-        String currentTest = "seen-6";
-
+//////
+//        String currentTest = "seen-9";
+//
 //        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
 //        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
 //        String initPath = basePath + "/tests/" + currentTest +"/initial.json";
@@ -117,7 +119,7 @@ public class Main {
         seen.add(state);
 
         // Does the current state satisfy required packages
-        if(state.containsAll(cs.getRequiredPackages())){
+        if(stateContainsRequiredPackages(state,cs)){
             if(Collections.disjoint(state,cs.getRequiredMissingPackages())){
                 List<List<String>> finalCommands = new ArrayList<>();
                 finalCommands.add(commands);
@@ -141,6 +143,56 @@ public class Main {
 
         return solutions;
     }
+
+    /**
+     * Check that a state fufills required packages constraints
+     * @param state the state
+     * @param cs the constraint
+     * @return boolean
+     */
+    public static boolean stateContainsRequiredPackages(HashSet<Package> state, ConstraintSet cs){
+
+        // We give a constraint package that does not require
+        // a specifc version this string to identify them
+        String anyVersion = cs.ANY_VERSION_ALLOWED;
+
+        boolean valid = true;
+        for (Package p:cs.getRequiredPackages()) {
+            if(p.getVersion().equals(anyVersion)){
+                if(!stateContainsAtLeastOne(state,p)){
+                    valid = false;
+                }
+            }
+            else{
+                if(!state.contains(p)){
+                    valid = false;
+                }
+            }
+        }
+
+        return valid;
+
+    }
+
+    /**
+     * Check that a state contains
+     * at least one of a particular package
+     * @param state the state
+     * @param p package to check
+     * @return boolean
+     */
+    public static boolean stateContainsAtLeastOne(HashSet<Package> state, Package p){
+        boolean containsOne = false;
+        for (Package sp:state) {
+            if(sp.getName().equals(p.getName())){
+                containsOne = true;
+                break;
+            }
+        }
+
+        return containsOne;
+    }
+
 
     /**
      * Test whether the current state is valid or not
@@ -224,12 +276,12 @@ public class Main {
      * @param repo the repository
      * @return list of list of packages
      */
-    public static List<List<Package>> parseDepends(List<List<String>> depends, List<Package> repo,HashMap<String,Package> packageMap){
+    public static List<List<Package>> parseDepends(List<List<String>> depends, List<Package> repo){
 
         List<List<Package>> dependsList = new ArrayList<>();
 
         for (List<String> branch:depends){
-            List<Package> packageBranch = parseDepConField(branch,repo, packageMap);
+            List<Package> packageBranch = parseDepConField(branch,repo);
             dependsList.add(packageBranch);
         }
 
@@ -243,7 +295,7 @@ public class Main {
      * @param repo the repo
      * @return list of packages
      */
-    public static List<Package> parseDepConField(List<String> field, List<Package> repo, HashMap<String,Package> packageMap){
+    public static List<Package> parseDepConField(List<String> field, List<Package> repo){
         List<Package> packageList = new ArrayList<>();
 
         for (String s:field) {
@@ -389,8 +441,8 @@ public class Main {
             String name = p.getName();
             int version = p.getVersionAsInt();
 
-            List<Package> conflicts = parseDepConField(p.getConflicts(),repo, packageMap);
-            List<List<Package>> depends = parseDepends(p.getDepends(), repo, packageMap);
+            List<Package> conflicts = parseDepConField(p.getConflicts(),repo);
+            List<List<Package>> depends = parseDepends(p.getDepends(), repo);
             p.setConflictsAsPackage(conflicts);
             p.setDependsAsPackage(depends);
 

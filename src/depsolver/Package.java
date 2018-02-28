@@ -9,7 +9,7 @@ class Package {
     private Integer size;
     private List<List<String>> depends = new ArrayList<>();
     private List<String> conflicts = new ArrayList<>();
-        private List<List<Package>> dependsAsPackage = new ArrayList<>();
+    private List<List<Package>> dependsAsPackage = new ArrayList<>();
     private List<Package> conflictsAsPackage = new ArrayList<>();
 
     public String getName() { return name; }
@@ -24,6 +24,36 @@ class Package {
     public void setConflicts(List<String> conflicts) { this.conflicts = conflicts; }
 
 
+    public Package(){
+
+    }
+
+    public Package(Package toClone){
+        this.name = toClone.getName();
+        this.version = toClone.getVersion();
+        this.size = toClone.size;
+        this.depends = toClone.depends;
+        this.conflicts = toClone.conflicts;
+    }
+
+    @Override
+    public boolean equals(Object p){
+        if(p instanceof Package) {
+            Package checkPackage = (Package) p;
+            if (this.name.equals(checkPackage.getName())) {
+                if (this.version.equals(checkPackage.getVersion())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode(){
+        return name.hashCode() + version.hashCode();
+    }
 
     public int getVersionAsInt(){
         return Main.getVersionAsInt(this.getVersion());
