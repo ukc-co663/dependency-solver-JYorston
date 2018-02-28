@@ -7,30 +7,31 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//////
-//        String currentTest = "seen-9";
-//
-//        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
-//        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
-//        String initPath = basePath + "/tests/" + currentTest +"/initial.json";
-//        String constPath = basePath + "/tests/" + currentTest +"/constraints.json";
 ////
-//        TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
-//        List<Package> repo = JSON.parseObject(readFile(repoPath), repoType);
-//        TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
-//        List<String> initial = JSON.parseObject(readFile(initPath), strListType);
-//        List<String> constraints = JSON.parseObject(readFile(constPath), strListType);
+        String currentTest = "seen-9";
 
+        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
+        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
+        String initPath = basePath + "/tests/" + currentTest +"/initial.json";
+        String constPath = basePath + "/tests/" + currentTest +"/constraints.json";
+//
         TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
-        List<Package> repo = JSON.parseObject(readFile(args[0]), repoType);
+        List<Package> repo = JSON.parseObject(readFile(repoPath), repoType);
         TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
-        List<String> initial = JSON.parseObject(readFile(args[1]), strListType);
-        List<String> constraints = JSON.parseObject(readFile(args[2]), strListType);
+        List<String> initial = JSON.parseObject(readFile(initPath), strListType);
+        List<String> constraints = JSON.parseObject(readFile(constPath), strListType);
+
+//        TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
+//        List<Package> repo = JSON.parseObject(readFile(args[0]), repoType);
+//        TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
+//        List<String> initial = JSON.parseObject(readFile(args[1]), strListType);
+//        List<String> constraints = JSON.parseObject(readFile(args[2]), strListType);
 
         HashMap<String,Package> packageMap = buildPackageMap(repo);
         HashSet<Package> initialSet = parseInitial(initial,packageMap);
@@ -118,6 +119,7 @@ public class Main {
 
         // Does the current state satisfy required packages
         if(stateContainsRequiredPackages(state,cs)){
+//        if(state.containsAll(cs.getRequiredPackages())){
             if(Collections.disjoint(state,cs.getRequiredMissingPackages())){
                 List<List<String>> finalCommands = new ArrayList<>();
                 finalCommands.add(commands);
@@ -306,7 +308,6 @@ public class Main {
                     if(p.getName().equals(pName)) {
                         if (p.getVersionAsInt() <= getVersionAsInt(vNum)) {
                             packageList.add(p);
-                            break;
                         }
                     }
                 }
@@ -320,7 +321,6 @@ public class Main {
                     if(p.getName().equals(pName)) {
                         if (p.getVersionAsInt() < getVersionAsInt(vNum)) {
                             packageList.add(p);
-                            break;
                         }
                     }
                 }
@@ -334,7 +334,6 @@ public class Main {
                     if(p.getName().equals(pName)) {
                         if (p.getVersionAsInt() >= getVersionAsInt(vNum)) {
                             packageList.add(p);
-                            break;
                         }
                     }
                 }
@@ -348,7 +347,6 @@ public class Main {
                     if(p.getName().equals(pName)) {
                         if (p.getVersionAsInt() > getVersionAsInt(vNum)) {
                             packageList.add(p);
-                            break;
                         }
                     }
                 }
