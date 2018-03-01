@@ -1,5 +1,6 @@
 package depsolver;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,32 +25,66 @@ public class ConstraintSet {
      * @param constraints constraints
      * @param packageMap the repository map
      */
-    public ConstraintSet(List<String> constraints, HashMap<String,Package> packageMap){
+    public ConstraintSet(List<String> constraints, HashMap<String,Package> packageMap, List<Package> repo){
 
         requiredPackages = new HashSet<>();
         requiredMissingPackages = new HashSet<>();
         for (String c:constraints) {
             if(c.charAt(0) == '-'){
-                Package missingPackage = Main.getPackageFromString(c.substring(1,c.length()),packageMap);
-                Package newPackage = new Package(missingPackage);
-
-                // If no version specified any version of the package is allowed
-                if(!c.contains("=")){
-                    newPackage.setVersion(ANY_VERSION_ALLOWED);
-                }
-
-                requiredMissingPackages.add(newPackage);
+                
+                List<String> constraint  = new ArrayList<>();
+                constraint.add(c.substring(1,c.length()));
+                
+                List<Package> packages = Main.parseDepConField(constraint,repo);
+                
+                requiredMissingPackages.addAll(packages);
             }
             else{
-                Package requiredPackage = Main.getPackageFromString(c.substring(1,c.length()),packageMap);
-                Package newPackage = new Package(requiredPackage);
+                Package packageToAdd = new Package();
 
-                // If no version specified any version of the package is allowed
-                if(!c.contains("=")){
-                    newPackage.setVersion(ANY_VERSION_ALLOWED);
+                if(!c.contains("<") && !c.contains(">")) {
+                    Package requiredPackage = Main.getPackageFromString(c.substring(1, c.length()), packageMap);
+                    packageToAdd = new Package(requiredPackage);
                 }
 
-                requiredPackages.add(newPackage);
+                if(c.contains("<=")) {
+                    String[] parts = c.split("<=");
+                    String pName = parts[0].substring(1,parts[0].length());
+                    String vNum = parts[1];
+                    packageToAdd = new Package();
+                    packageToAdd.setName(pName);
+                    packageToAdd.setVersion("<=" + vNum);
+                }
+                else if(c.contains("<")){
+                    String[] parts = c.split("<");
+                    String pName = parts[0].substring(1,parts[0].length());
+                    String vNum = parts[1];
+                    packageToAdd = new Package();
+                    packageToAdd.setName(pName);
+                    packageToAdd.setVersion("<" + vNum);
+                }
+                else if(c.contains(">=")){
+                    String[] parts = c.split(">=");
+                    String pName = parts[0].substring(1,parts[0].length());
+                    String vNum = parts[1];
+                    packageToAdd = new Package();
+                    packageToAdd.setName(pName);
+                    packageToAdd.setVersion(">=" + vNum);
+                }
+                else if(c.contains(">")){
+                    String[] parts = c.split(">");
+                    String pName = parts[0].substring(1,parts[0].length());
+                    String vNum = parts[1];
+                    packageToAdd = new Package();
+                    packageToAdd.setName(pName);
+                    packageToAdd.setVersion(">" + vNum);
+                }
+
+                if(!c.contains("=") && !c.contains("<") && !c.contains(">")){
+                   packageToAdd.setVersion(ANY_VERSION_ALLOWED);
+                }
+
+                requiredPackages.add(packageToAdd);
             }
         }
     }

@@ -14,13 +14,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 //////
-//        String currentTest = "seen-9";
+//        String currentTest = "seen-4";
 //
 //        String basePath = Paths.get(".").toAbsolutePath().normalize().toString();
 //        String repoPath = basePath + "/tests/" + currentTest +"/repository.json";
 //        String initPath = basePath + "/tests/" + currentTest +"/initial.json";
 //        String constPath = basePath + "/tests/" + currentTest +"/constraints.json";
-////
+//
 //        TypeReference<List<Package>> repoType = new TypeReference<List<Package>>() {};
 //        List<Package> repo = JSON.parseObject(readFile(repoPath), repoType);
 //        TypeReference<List<String>> strListType = new TypeReference<List<String>>() {};
@@ -37,7 +37,7 @@ public class Main {
         HashSet<Package> initialSet = parseInitial(initial,packageMap);
 
         // Generate all paths
-        ConstraintSet cs = new ConstraintSet(constraints,packageMap);
+        ConstraintSet cs = new ConstraintSet(constraints,packageMap,repo);
         List<List<String>> paths = search(initialSet,repo,new HashSet<>(),cs, new ArrayList<>());
 
         // Calculate the min cost path
@@ -162,6 +162,26 @@ public class Main {
                     valid = false;
                 }
             }
+            else if (p.getVersion().contains("<=")){
+                if(!stateContainsAtLeastOneInRange(state,p,"<=")){
+                    valid = false;
+                }
+            }
+            else if(p.getVersion().contains("<")){
+                if(!stateContainsAtLeastOneInRange(state,p,"<")){
+                    valid = false;
+                }
+            }
+            else if (p.getVersion().contains(">=")){
+                if(!stateContainsAtLeastOneInRange(state,p,">=")){
+                    valid = false;
+                }
+            }
+            else if (p.getVersion().contains(">")){
+                if(!stateContainsAtLeastOneInRange(state,p,">")){
+                    valid = false;
+                }
+            }
             else{
                 if(!state.contains(p)){
                     valid = false;
@@ -171,6 +191,75 @@ public class Main {
 
         return valid;
 
+    }
+
+    /**
+     * Check that a state contains
+     * at least one of a particular package in a range
+     * @param state the state
+     * @param p package to check
+     * @return boolean
+     */
+    public static boolean stateContainsAtLeastOneInRange(HashSet<Package> state, Package p, String range){
+        boolean containsOne = false;
+
+        for (Package sp:state) {
+            if(range.equals("<=")) {
+                String[] parts = p.getVersion().split("<=");
+                String vNum = parts[1];
+
+                if (sp.getName().equals(p.getName())) {
+                    if (sp.getVersionAsInt() <= getVersionAsInt(vNum)) {
+                        containsOne = true;
+                    }
+                    else if(sp.getVersionAsInt() > getVersionAsInt(vNum)){
+                        break;
+                    }
+                }
+            }
+            else if(range.equals("<")){
+                String[] parts = p.getVersion().split("<");
+                String vNum = parts[1];
+
+                if (sp.getName().equals(p.getName())) {
+                    if (sp.getVersionAsInt() < getVersionAsInt(vNum)) {
+                        containsOne = true;
+                    }
+                    else if(sp.getVersionAsInt() >= getVersionAsInt(vNum)){
+                        break;
+                    }
+                }
+            }
+            else if(range.equals(">=")){
+                String[] parts = p.getVersion().split(">=");
+                String vNum = parts[1];
+
+                if (sp.getName().equals(p.getName())) {
+                    if (sp.getVersionAsInt() >= getVersionAsInt(vNum)) {
+                        containsOne = true;
+                    }
+                    else if(sp.getVersionAsInt() < getVersionAsInt(vNum)){
+                        break;
+                    }
+                }
+            }
+            else if(range.equals(">")){
+                String[] parts = p.getVersion().split(">");
+                String vNum = parts[1];
+
+                if (sp.getName().equals(p.getName())) {
+                    if (sp.getVersionAsInt() > getVersionAsInt(vNum)) {
+                        containsOne = true;
+                    }
+                    else if(sp.getVersionAsInt() <= getVersionAsInt(vNum)){
+                        break;
+                    }
+                }
+
+            }
+        }
+
+        return containsOne;
     }
 
     /**
